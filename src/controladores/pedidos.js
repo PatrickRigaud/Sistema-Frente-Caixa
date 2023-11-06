@@ -80,12 +80,19 @@ const cadastrarPedido = async (req, res) => {
       await produtoDados.atualizarProduto(produto);
     }
 
+    const contexto = {
+      name: req.usuario.nome
+    }
+
+    const HTML = await compilarHTML('src/templates/pedidos.html', contexto)
+    await enviarEmail(HTML, cliente.eamil, pedido.id)
+
     return res.status(201).json({ mensagem: mensagem.pedidoGerado });
   } catch (error) {
-    console.log(error.message)
-    return res.status(400).json({ mensagem: "oi" });
+    console.log(error)
+    return res.status(400).json({ mensagem: mensagem.erroInterno });
   }
-};
+}
 
 module.exports = {
   listarPedidos,
