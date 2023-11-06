@@ -211,8 +211,7 @@ const schemaProduto = Joi.object({
         .required()
         .empty("")
         .messages({
-            "number.positive":
-                "O campo quantidade_estoque precisa ser um número positivo",
+            "number.positive": "O campo quantidade_estoque precisa ser um número positivo",
             "any.required": "É necessário informar a quantidade que há em estoque.",
             "any.empty": "A quantidade_estoque não pode ser um campo vazio",
         }),

@@ -1,6 +1,6 @@
-const requisicao = require("../dados/pedidos-dados");
-const produtoDados = require("../dados/produto-dados");
-const mensagem = require("../utilitarios/mensagens");
+const requisicao = require('../dados/pedidos-dados');
+const mensagem = require('../utilitarios/mensagens');
+const produtoDados = require('../dados/produto-dados')
 
 const listarPedidos = async (req, res) => {
   const { cliente_id } = req.query;
@@ -10,9 +10,7 @@ const listarPedidos = async (req, res) => {
       validarCliente = await requisicao.buscarCliente(cliente_id);
 
       if (!validarCliente) {
-        return res
-          .status(400)
-          .json({ mensagem: mensagem.clienteNaoEncontrado });
+        return res.status(400).json({ mensagem: mensagem.clienteNaoEncontrado });
       }
 
       const pedido = await requisicao.listarPedidoCliente(cliente_id);
@@ -24,14 +22,14 @@ const listarPedidos = async (req, res) => {
 
     return res.status(200).json(pedidos);
   } catch (error) {
-    console.log(error);
+    console.log(error)
     return res.status(500).json({ mensagem: mensagem.erroInterno });
   }
-};
+
+}
 
 const cadastrarPedido = async (req, res) => {
   const { observacao, pedido_produtos, cliente_id } = req.body;
-
   try {
     const cliente = await requisicao.buscarCliente(cliente_id);
 
@@ -46,6 +44,7 @@ const cadastrarPedido = async (req, res) => {
       const produto = await produtoDados.buscarProduto(item.produto_id);
       if (!produto) {
         erros.push({
+          produto_id: item.produto_id,
           mensagem: mensagem.produtoInexistente,
         });
         continue;
@@ -53,6 +52,7 @@ const cadastrarPedido = async (req, res) => {
 
       if (item.quantidade_produto > produto.quantidade_estoque) {
         erros.push({
+          produto_id: item.produto_id,
           mensagem: mensagem.produtoInsuficiente,
         });
         continue;
@@ -80,29 +80,11 @@ const cadastrarPedido = async (req, res) => {
       await produtoDados.atualizarProduto(produto);
     }
 
-    const clienteEmail = {
-      email:'larissagnandt@gmail.com'
-    }
-  
-    const html = await compiladorHtml('./src/template/pedidos.html', {
-      clienteEmail
-  
-    })
-  
-    transportador.sendMail({
-      from: `${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
-      to: `${clienteEmail}`,
-      subject: 'Cadastro de pedido',
-      html,
-  
-    })
-
     return res.status(201).json({ mensagem: mensagem.pedidoGerado });
   } catch (error) {
-    console.log(error)
-    return res.status(400).json({ mensagem: mensagem.erroInterno });
+    console.log(error.message)
+    return res.status(400).json({ mensagem: "oi" });
   }
-
 };
 
 module.exports = {

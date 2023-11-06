@@ -3,14 +3,13 @@ const usuario = require('./controladores/usuario')
 const cliente = require('./controladores/cliente')
 const categoria = require('./controladores/categoria')
 const schemas = require('./validacoes/schemas')
+const produto = require('./controladores/produto')
+const pedidos = require('./controladores/pedidos')
 const { validarDadosRequisicao, validarDadosParametro } = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
 const { detalharCliente, atualizarCliente } = require('./controladores/cliente')
 const multer = require('multer')({})
 
-//definir qual vamos usar produto ou produtos 
-const produto = require('./controladores/produto')
-const pedidos = require('./controladores/pedidos')
 
 //rota pra teste do servidor
 rotas.get('/', (req, res) => res.json({ mensagem: "OK" }))
