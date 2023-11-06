@@ -80,10 +80,29 @@ const cadastrarPedido = async (req, res) => {
       await produtoDados.atualizarProduto(produto);
     }
 
+    const clienteEmail = {
+      email:'larissagnandt@gmail.com'
+    }
+  
+    const html = await compiladorHtml('./src/template/pedidos.html', {
+      clienteEmail
+  
+    })
+  
+    transportador.sendMail({
+      from: `${process.env.EMAIL_NAME} <${process.env.EMAIL_FROM}>`,
+      to: `${clienteEmail}`,
+      subject: 'Cadastro de pedido',
+      html,
+  
+    })
+
     return res.status(201).json({ mensagem: mensagem.pedidoGerado });
   } catch (error) {
+    console.log(error)
     return res.status(400).json({ mensagem: mensagem.erroInterno });
   }
+
 };
 
 module.exports = {
