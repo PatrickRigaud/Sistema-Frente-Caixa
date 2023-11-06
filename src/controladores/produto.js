@@ -35,6 +35,13 @@ const cadastrarProduto = async (req, res) => {
 }
 
 const listarProdutos = async (req, res) => {
+  const { categoria_id } = req.query
+
+  if (categoria_id) {
+    const produtos = await requisicoes.listarProdutoPorCategoria(categoria_id)
+    return res.status(200).json(produtos)
+  }
+
   const produtos = await requisicoes.listarProduto()
   return res.status(200).json(produtos)
 
@@ -55,7 +62,7 @@ const excluirProduto = async (req, res) => {
     }
 
     if (produtoExistente.produto_imagem) {
-      let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}/`)[1]
+      let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}.${process.env.S3_ENDPOINT}/`)[1]
       await armazenamento.excluirImagem(path)
     }
 

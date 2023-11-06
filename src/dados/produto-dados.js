@@ -42,6 +42,10 @@ const buscarProdutoEmPedidos = async (id) => {
   return await knex("pedido_produtos").where("produto_id", id).first();
 }
 
+const listarProdutoPorCategoria = async (categoria_id) => {
+  return await knex("produtos").where({ categoria_id })
+}
+
 module.exports = {
 
   buscarProduto,
@@ -51,6 +55,7 @@ module.exports = {
   listarProduto,
   cadastrarProduto,
   verificarProdutosPorDescricao,
-  buscarProdutoEmPedidos
+  buscarProdutoEmPedidos,
+  listarProdutoPorCategoria
 
 }
